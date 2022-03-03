@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}"
+      th:with="metaTitle='메인'">
+<head>
+</head>
+
+<body>
+<!-- content -->
+<th:block layout:fragment="content">
+    <!-- 참여중인 게임이 없을 경우 : 게임리스트-->
+    <div th:if="${session.user != null && gameMembers == null}">
+        <p>참여 중인 게임이 없군요.</p>
+    </div>
+    <!-- 참여중인 게임 있을 있을경우 -->
+
+    <div th:if="${session.user != null && gameMembers != null && gameMembers.get(0).getGame().getStartDt() == null}">
+        게임을 아직 시작하지 않았습니다
+    </div>
+    <div th:if="${session.user != null && gameMembers != null && gameMembers.get(0).getGame().getStartDt() != null}">
+        <!--악마-->
+        <div th:if="${member.participationRole != null &&  member.participationRole.name().equals('DEVIL')}">
+
+            <p>악마코드 생성하기</p>
+            <h2 id="devil_code"> </h2>
+            <input type="button" id="btn_code_gen" th:onclick="|genDevilCode(${member.idx})|" value = "생성하기" />
+        </div>
+    </div>
+
+    <!-- 참여중인 게임 있을 있을경우 -->
+    <div th:if="${session.user != null && gameMembers != null && gameMembers.get(0).getGame().getStartDt() != null}">
+        <!--악마-->
+        <div th:if="${member.participationRole != null
+        &&  member.hireDevil == null
+        &&  !member.participationRole.name().equals('DEVIL')}">
+
+            <label for="input_save_code">악마코드 등록하기</label><br>
+            <input type="text" id="input_save_code"  required placeholder="악마코드 입력" />
+            <input type="button" id="btn_code_save" th:onclick="|saveDevilCode(${member.idx})|" value = "등록하기" />
+        </div>
+
+        <div th:if="${member.participationRole != null
+        &&  member.hireDevil != null
+        &&  !member.participationRole.name().equals('DEVIL')}">
+            <p>당신은 이미 악마에게 매수 당했습니다.</p>
+        </div>
+    </div>
+</th:block>
+<!-- //content -->
+
+<!-- script -->
+<th:block layout:fragment="custom_js">
+    <script th:src="@{/assets/views/js/tool.js}"></script>
+</th:block>
+<!-- //script -->
+
+</body>
+</html>

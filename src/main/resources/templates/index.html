@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/index.css}" rel="stylesheet" type="text/css">
+    <title>test</title>
+</head>
+<body>
+
+<a th:if="${session.user == null}" href="http://localhost:8080/loginPage">Login</a>
+<p th:if="${session.user != null}" th:text="| 화이팅, ${session.user.userName} |"> </p>
+<a th:if="${session.user != null}" href="http://localhost:8080/user/signout"> Logout</a>
+
+<h1 th:text="${targetTime}"></h1>
+
+</body>
+</html>

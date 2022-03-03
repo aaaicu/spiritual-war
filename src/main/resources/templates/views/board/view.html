@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}"
+      th:with="metaTitle='게시판'">
+<head>
+</head>
+
+<body>
+<!-- content -->
+<th:block layout:fragment="content">
+    <div>
+        <h2><span th:text="${boardId}"></span>번 - 게시판 </h2>
+    </div>
+</th:block>
+<!-- //content -->
+
+<!-- script -->
+<th:block layout:fragment="custom_js">
+    <script th:src="@{/assets/views/board/view.js}"></script>
+</th:block>
+<!-- //script -->
+
+</body>
+</html>

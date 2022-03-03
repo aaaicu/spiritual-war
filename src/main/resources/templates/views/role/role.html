@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}"
+      th:with="metaTitle='메인'">
+<head>
+</head>
+
+<body>
+<!-- content -->
+<th:block layout:fragment="content">
+    <!-- 참여중인 게임이 없을 경우 : 게임리스트-->
+    <div th:if="${session.user != null && gameMembers == null}">
+        <p>참여 중인 게임이 없군요.</p>
+    </div>
+    <!-- 참여중인 게임 있을 있을경우 -->
+    <div th:if="${session.user != null && gameMembers != null && gameMembers.get(0).getGame().getStartDt() == null}">
+        게임을 아직 시작하지 않았습니다
+    </div>
+    <div th:if="${session.user != null && gameMembers != null && gameMembers.get(0).getGame().getStartDt() != null}">
+
+        <p>당신의 역할은</p>
+        <strong><p th:text="|${member.participationRole.getValue()}|"></p></strong>입니다.
+        <br>
+
+        <div th:if="${member.participationRole != null &&  member.participationRole.name().equals('FAN')}">
+            <p th:text="|당신은 ${member.getFan()} (${member.getFan().user.userId})의 팬입니다.|"></p>
+            <p th:text="|게임이 시작할 때 ${member.getFan().user.userName}(${member.getFan().user.userId})님은 시민이 었습니다.|"></p>
+        </div>
+
+        <br>
+        <div th:if="${member.participationRole != null &&  member.participationRole.name().equals('FRIEND')}">
+            <p th:text="|당신은 ${member.getBestFriend().user.userName}(${member.getBestFriend().user.userId}) 님과 친구입니다.|"></p>
+
+            <p style="color:blue;" th:if="${member.getBestFriend().hiredDt == null}" th:text="|당신의 친구는 현재 악마가 아닙니다.|"></p>
+            <p style="color:tomato;" th:if="${member.getBestFriend().hiredDt != null}" th:text="|당신의 친구는 현재 악마입니다.|"></p>
+        </div>
+
+        <p th:if="${member.hiredDt != null}" th:text="|당신은 매수당했군요. 악마에게 영혼을 팔다니..|"></p></strong>
+
+    </div>
+
+</th:block>
+<!-- //content -->
+
+<!-- script -->
+<th:block layout:fragment="custom_js">
+    <script th:src="@{/assets/views/js/main.js}"></script>
+</th:block>
+<!-- //script -->
+
+</body>
+</html>

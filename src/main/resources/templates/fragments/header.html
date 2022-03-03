@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<header th:fragment="header">
+    <div>
+        <h3> [영적전쟁] </h3>
+        <div th:if="${session.user != null && session.manager == null}"><a href="/view/home">홈</a> | <a
+                href="/view/role">내역할</a> | <a href="/view/tool">기능</a></div>
+        <!--    <div th:if="${session.user != null && session.manager == null}"><a href="/view/home">홈</a> | <a href="/view/role">내역할</a> | <a href="/view/tool">기능</a> | <a href="/view/room">방</a>  |  <a href="/view/result">결과</a></div>-->
+
+      <div>
+
+        <!--  <section class="notify-wrap">
+            <div class="notify-wrap-inner ellipsis">
+              <div class="notify-scroll">
+                <ul>
+                  <li>
+                    <a href="javascript:void(0)">공지사항1</a>
+                  </li>
+                  <li>
+                    <a href="javascript:void(0)">공지사항2</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>-->
+
+        <style>/* reset */
+        a{
+          text-decoration:none;
+          color:inherit;
+        }
+        ul, li{
+          list-style:none;
+        }
+
+        .notify-wrap{
+          position:relative;
+          background: #dcdddd;
+        }
+        .notify-wrap-inner{
+          height: 40px;
+          line-height:40px;
+          padding: 0 20px;
+          margin:0 30px;
+          background: #dcdddd;
+          text-align: center;
+        }
+        .ellipsis{
+          overflow: hidden;
+          text-overflow:ellipsis;
+          white-space:nowrap;
+        }
+        .notify-scroll{
+          display: inline-block;
+          animation:text-scroll 35s linear infinite;
+        }
+        @keyframes text-scroll{
+          from{
+            transform:translateX(20%);
+            -moz-transform:translateX(20%);
+            -webkit-transform:translateX(20%);
+            -o-transform:translateX(20%);
+            -ms-transform:translateX(20%);
+          }
+          to{
+            transform:translateX(-100%);
+            -moz-transform:translateX(-100%);
+            -webkit-transform:translateX(-100%);
+            -o-transform:translateX(-100%);
+            -ms-transform:translateX(-100%);
+          }
+        }
+        .notify-scroll ul{
+          display: inline;
+        }
+        .notify-scroll ul li{
+          display: inline-block;
+          padding-right: 350px;
+        }
+        </style>
+      </div>
+
+    </div>
+    <a th:if="${session.user != null}" href="/view/home/signout"> Logout</a>
+    <hr>
+</header>
+</html>
