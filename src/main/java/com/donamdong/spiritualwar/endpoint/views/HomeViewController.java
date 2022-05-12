@@ -3,7 +3,6 @@ package com.donamdong.spiritualwar.endpoint.views;
 import com.donamdong.spiritualwar.domain.GameParticipation;
 import com.donamdong.spiritualwar.domain.User;
 import com.donamdong.spiritualwar.endpoint.user.dto.request.SignInRequest;
-import com.donamdong.spiritualwar.endpoint.user.dto.request.SignUpRequest;
 import com.donamdong.spiritualwar.service.game.GameParticipationService;
 import com.donamdong.spiritualwar.service.game.GameService;
 import com.donamdong.spiritualwar.service.user.UserService;
@@ -50,6 +49,8 @@ public class HomeViewController {
                     //하드코딩
                     List<GameParticipation> gameMembers = gameParticipationService.findGameMemberAll(1L);
 
+
+
                     //관리자일 경우
                     model.addAttribute("gameMembers",gameMembers);
                     return "views/home/admin";
@@ -60,12 +61,11 @@ public class HomeViewController {
                 // 참여중 게임 있을 경우
                 List<GameParticipation> gameMembers = gameParticipationService.findGameMember(checkedUser.getIdx());
 
-                if (gameMembers.size()!=0) {
+                if (!gameMembers.isEmpty()) {
                     model.addAttribute("gameMembers",gameMembers);
                 } else {
-
                     // 참여중 게임 없을 경우
-                    model.addAttribute("gameInfo", gameService.fetchGames());
+                    model.addAttribute("gameInfo", gameService.fetchCanJoinGameList());
                 }
 
                 return "views/home/main";
@@ -94,7 +94,7 @@ public class HomeViewController {
                 .userPassword(pw)
                 .build();
 
-        Optional<User> user = userService.signin(signInRequest);
+        Optional<User> user = userService.signIn(signInRequest);
 
         if (user.isEmpty()) {
             session.setAttribute("user", null);

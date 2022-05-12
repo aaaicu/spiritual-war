@@ -17,12 +17,7 @@ public class HomeController {
     @GetMapping("/")
     String indexPage(Model model) {
         LocalDateTime targetTime = LocalDateTime.now();
-
-        String s = devilCodeGenerator.excuteGenerate();
-
-
         model.addAttribute("targetTime", targetTime);
-
         return "index";
     }
 }

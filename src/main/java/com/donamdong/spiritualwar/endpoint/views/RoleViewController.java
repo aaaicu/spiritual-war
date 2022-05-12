@@ -32,14 +32,11 @@ public class RoleViewController {
 
             // 참여중 게임 있을 경우
             List<GameParticipation> gameMembers = gameParticipationService.findGameMember(checkedUser.getIdx());
-            if (gameMembers.size()!=0) {
+            if (!gameMembers.isEmpty()) {
                 model.addAttribute("gameMembers",gameMembers);
 
                 GameParticipation gameParticipation = gameMembers.stream().filter(e -> e.getUser().getIdx().equals(checkedUser.getIdx())).findFirst().get();
                 model.addAttribute("member",gameParticipation);
-
-
-
 
             } else {
                 // 참여중 게임 없을 경우

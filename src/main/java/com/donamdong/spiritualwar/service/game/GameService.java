@@ -28,20 +28,25 @@ public class GameService {
 
 
 
-    public Game openGame(GameSetting gameSetting, List<GameRound> gameRounds) {
+    public Game openNewGame(GameSetting gameSetting) {
         gameSetting.setCreateDt(LocalDateTime.now());
 
         GameSetting savedSetting = gameSettingRepository.save(gameSetting);
         Game game = Game.builder().gameSetting(savedSetting).createDt(LocalDateTime.now()).build();
         gameRepository.save(game);
-        gameRounds.forEach(e -> {
-            e.setGame(game);
-            gameRoundService.saveUpdateGameRound(e);
-        });
+
+        for (int i = 0; i < gameSetting.getTotalRound(); i++) {
+            gameRoundService.saveGameRound(GameRound.builder()
+                    .game(game)
+                    .sortingOrder(i + 1)
+                    .holidayYn(false)
+                    .build());
+        }
+
         return game;
     }
 
-    public List<Game> fetchGames() {
+    public List<Game> fetchCanJoinGameList() {
         return gameRepository.findAllGameNotEnd();
     }
 

@@ -20,7 +20,7 @@ public class GameRoundService {
         gameRoundRepository.deleteById(gameSettingIdx);
     }
 
-    public GameRound saveUpdateGameRound(GameRound gameRound) {
+    public GameRound saveGameRound(GameRound gameRound) {
         return gameRoundRepository.save(gameRound);
     }
 

@@ -1,21 +1,17 @@
 package com.donamdong.spiritualwar.endpoint.game.controller;
 
 import com.donamdong.spiritualwar.domain.Game;
-import com.donamdong.spiritualwar.domain.GameParticipation;
 import com.donamdong.spiritualwar.domain.GameSetting;
-import com.donamdong.spiritualwar.endpoint.game.dto.request.SaveGameRequest;
 import com.donamdong.spiritualwar.endpoint.game.dto.request.OpenGameRequest;
+import com.donamdong.spiritualwar.endpoint.game.dto.request.SaveGameRequest;
 import com.donamdong.spiritualwar.service.game.GameParticipationService;
 import com.donamdong.spiritualwar.service.game.GameService;
 import com.donamdong.spiritualwar.service.game.GameSettingService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.StringReader;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,14 +24,15 @@ public class GameController {
     private final GameService gameService;
     private final GameParticipationService gameParticipationService;
 
-    @PostMapping("/open")
-    ResponseEntity<Game> openGame(@Valid @RequestBody OpenGameRequest openGameRequest) {
-        return ResponseEntity.ok(gameService.openGame(openGameRequest.getGameSetting(), openGameRequest.getGameRounds()));
+    @PostMapping(value = "/open")
+    public Game openGame(@RequestBody OpenGameRequest openGameRequest) {
+        System.out.println("openGameRequest = " + openGameRequest.getGameSetting());
+        return gameService.openNewGame(openGameRequest.getGameSetting());
     }
 
     @GetMapping("/fetch")
     ResponseEntity<List<Game>> fetchGame() {
-        return ResponseEntity.ok(gameService.fetchGames().stream().filter(game -> game.getEndDt()!=null).collect(Collectors.toList()));
+        return ResponseEntity.ok(gameService.fetchCanJoinGameList().stream().filter(game -> game.getEndDt()!=null).collect(Collectors.toList()));
     }
 
     @PostMapping("/setting/save")

@@ -40,7 +40,7 @@ public class GameParticipationService {
         User user = userService.getUser(userIdx);
 
         List<Game> games = gameRepository.findGameParticipationByUserIdx(user);
-        if (games.size() == 0) {
+        if (games.isEmpty()) {
             return List.of();
         } else {
             return gameParticipationRepository.findAllUserByGameJoin(games.get(0));

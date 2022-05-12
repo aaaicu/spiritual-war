@@ -1,6 +1,5 @@
 package com.donamdong.spiritualwar.service.user;
 
-import com.donamdong.spiritualwar.domain.Game;
 import com.donamdong.spiritualwar.domain.User;
 import com.donamdong.spiritualwar.endpoint.user.dto.request.SignInRequest;
 import com.donamdong.spiritualwar.repository.user.UserRepository;
@@ -28,7 +27,7 @@ public class UserService {
     }
 
 
-    public Optional<User> signin(SignInRequest signInRequest) {
+    public Optional<User> signIn(SignInRequest signInRequest) {
         return userRepository.findFirstByUserIdAndUserPassword(signInRequest.getUserId(), signInRequest.getUserPassword());
     }
 

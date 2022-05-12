@@ -5,8 +5,13 @@ plugins {
 }
 
 group = 'com.donamdong'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+version = '0.0.1-SNAPSHOT'+ '_' + getTimestamp()
+sourceCompatibility = '14'
+
+def getTimestamp() {
+    //date_Hours, minutes, and seconds_millisecond
+    return new Date().format('yyyyMMdd_HHmmss_SSS')
+}
 
 configurations {
     compileOnly {
@@ -31,8 +36,11 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+
+
 }
 
 tasks.named('test') {
-    useJUnitPlatform()
+//    useJUnitPlatform()
 }

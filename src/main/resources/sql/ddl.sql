@@ -1,20 +1,3 @@
-create table spiritual_war.`#mysql50#game_participation 2`
-(
-    idx                int unsigned auto_increment comment '게임 참여 IDX',
-    game_idx           int unsigned                  not null comment '게임 IDX',
-    user_idx           int unsigned                  not null comment '사용자 IDX',
-    best_friend_idx    int unsigned                  null comment '커플 IDX',
-    participation_role varchar(10) default 'CITIZEN' not null comment '역할 : CITIZEN / DEVIL',
-    hired_dt           datetime                      null comment '매수 당한 시간',
-    hire_devil_idx     int unsigned                  null,
-    create_dt          datetime                      null comment '생성일자',
-    fan_idx            int unsigned                  null,
-    holy_watching_idx  int unsigned                  null comment '감시 대상 IDX',
-    user_id            varchar(20)                   not null comment '반정규화 컬럼',
-    user_name          varchar(10)                   not null comment '반정규화 컬럼'
-)
-    charset = utf8;
-
 create table spiritual_war.game_setting
 (
     idx                  int unsigned auto_increment
