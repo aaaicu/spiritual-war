@@ -1,5 +1,7 @@
 package com.donamdong.spiritualwar.service.user;
 
+import com.donamdong.spiritualwar.common.exception.ApiException;
+import com.donamdong.spiritualwar.common.exception.ErrorCode;
 import com.donamdong.spiritualwar.domain.User;
 import com.donamdong.spiritualwar.endpoint.user.dto.request.SignInRequest;
 import com.donamdong.spiritualwar.repository.user.UserRepository;
@@ -32,7 +34,7 @@ public class UserService {
     }
 
     public User getUser(Long userIdx) {
-        return userRepository.findById(userIdx).orElseThrow(() -> new RuntimeException("사용자 없음"));
+        return userRepository.findById(userIdx).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUNT_MEMBER));
     }
 
 }

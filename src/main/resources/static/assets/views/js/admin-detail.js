@@ -17,7 +17,7 @@ function fetchStatus(gameIdx) {
             $("#btn_game").val("게임시작");
             $("#btn_game").data("req", "START");
         } else {
-            $("#btn_game").val("끝");
+            $("#btn_game").val("종료된 게임");
             $("#btn_game").attr("disabled", true);
             $("#btn_game").data("req", "");
         }
@@ -27,10 +27,10 @@ function fetchStatus(gameIdx) {
 function changeStatus(gameIdx) {
     $.get("/game/change/status", {"gameIdx": gameIdx, "req": $("#btn_game").data('req')}, function () {
         fetchStatus(gameIdx);
-        window.location.href = '/view/home';
-    }).fail(function (error) {
-        console.log(error);
+        goGameDetail(gameIdx);
 
+    }).fail(function (error) {
+        alert(error.responseJSON.message);
     })
 }
 
@@ -41,4 +41,8 @@ function getGameIdxFromUrlParams() {
     const urlParams = new URLSearchParams(queryString);
 
     return urlParams.get('gameIdx');
+}
+
+function goGameDetail(gameIdx) {
+    window.location.href = '/view/admin/game/detail?gameIdx='+gameIdx;
 }

@@ -30,49 +30,26 @@ public class HomeViewController {
     private final GameService gameService;
     private final GameParticipationService gameParticipationService;
 
-
     @GetMapping
     public String signInPage(HttpSession session, Model model, RedirectAttributes redirectAttributes, @RequestParam(required = false) String result) {
-        Optional<User> user = Optional.ofNullable((User) session.getAttribute("user"));
 
-        User checkedUser;
-        if (user.isPresent()) {
-            checkedUser = userService.getUser(user.get().getIdx());
-
-            //정상로그인
-            if (checkedUser.getUserId() != null && !checkedUser.getUserId().isEmpty()) {
-
-                // 관리자
-                if (checkedUser.getManagerYn()) {
-                    session.setAttribute("manager", "true");
-                    return "redirect:/view/admin/game/list";
-                }
-
-                session.setAttribute("user",checkedUser);
-
-                // 참여중 게임 있을 경우
-                List<GameParticipation> gameMembers = gameParticipationService.findGameMember(checkedUser.getIdx());
-
-                if (!gameMembers.isEmpty()) {
-                    model.addAttribute("gameMembers",gameMembers);
-                } else {
-                    // 참여중 게임 없을 경우
-                    model.addAttribute("gameInfo", gameService.fetchCanJoinGameList());
-                }
-
-                return "views/home/main";
-
-            } else {
-                session.setAttribute("user", null);
-                redirectAttributes.addFlashAttribute("msg", false);
-            }
+        Optional<User> user = getUserInfo(session);
+        if (user.isEmpty()) {
+            flushLoginData(session, model, redirectAttributes, result);
+            return "views/home/signin";
         }
-        if (result !=null) {
-            model.addAttribute("result", result);
 
+        if (user.get().getManagerYn()) {
+            setSessionManager(session, user.get());
+            return "redirect:/view/admin/game/list";
+
+        } else {
+            setSessionNormalUser(session, user.get());
+            setModelUserGameInfo(model,  user.get());
+            return "views/home/main";
         }
-        return "views/home/signin";
     }
+
 
     @PostMapping("/signin")
     ModelAndView signIn(HttpServletRequest request,
@@ -125,4 +102,39 @@ public class HomeViewController {
         userService.signUp(User.builder().userName(name).userPassword(pw).userId(id).build());
         return new ModelAndView("redirect:/view/home");
     }
+
+
+    private void flushLoginData(HttpSession session, Model model, RedirectAttributes redirectAttributes, String result) {
+        session.setAttribute("user", null);
+        redirectAttributes.addFlashAttribute("msg", false);
+        model.addAttribute("result", result);
+    }
+
+    private void setModelUserGameInfo(Model model, User user) {
+        // 참여중 게임 있을 경우
+        List<GameParticipation> gameMembers = gameParticipationService.findGameMember(user.getIdx());
+
+        if (!gameMembers.isEmpty()) {
+            model.addAttribute("gameMembers",gameMembers);
+        } else {
+            // 참여중 게임 없을 경우
+            model.addAttribute("gameInfo", gameService.fetchCanJoinGameList());
+        }
+    }
+
+    private void setSessionNormalUser(HttpSession session, User user) {
+        session.setAttribute("user",user);
+    }
+
+    private void setSessionManager(HttpSession session, User user) {
+        session.setAttribute("manager", "true");
+        session.setAttribute("user",user);
+    }
+
+    private Optional<User> getUserInfo(HttpSession session) {
+        Optional<User> user = Optional.ofNullable((User) session.getAttribute("user"));
+        return user.map(u -> userService.getUser(u.getIdx()));
+
+    }
+
 }
