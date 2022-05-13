@@ -1,5 +1,7 @@
 package com.donamdong.spiritualwar.service.game;
 
+import com.donamdong.spiritualwar.common.exception.ApiException;
+import com.donamdong.spiritualwar.common.exception.ErrorCode;
 import com.donamdong.spiritualwar.domain.*;
 import com.donamdong.spiritualwar.domain.dto.MemberDTO;
 import com.donamdong.spiritualwar.repository.game.GameParticipationRepository;
@@ -61,7 +63,7 @@ public class GameParticipationService {
         List<GameParticipation> gameMemberAll = findGameMemberAll(gameIdx);
 
         if (gameMemberAll.size() < 14 || gameMemberAll.size() > 30) {
-            throw new RuntimeException("인원수 부적절");
+            throw new ApiException(ErrorCode.MEMBER_COUNT_NOT_ENOUGH);
         }
 
         gameMemberAll.forEach(participation -> {

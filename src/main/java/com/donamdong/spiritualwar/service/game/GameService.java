@@ -109,4 +109,8 @@ public class GameService {
         devilCodeRepository.save(devilCode);
         gameParticipationRepository.save(gameParticipation);
     }
+
+    public List<Game> getGameList() {
+        return gameRepository.findAll();
+    }
 }

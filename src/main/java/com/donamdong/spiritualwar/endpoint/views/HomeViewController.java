@@ -45,15 +45,7 @@ public class HomeViewController {
                 // 관리자
                 if (checkedUser.getManagerYn()) {
                     session.setAttribute("manager", "true");
-
-                    //하드코딩
-                    List<GameParticipation> gameMembers = gameParticipationService.findGameMemberAll(1L);
-
-
-
-                    //관리자일 경우
-                    model.addAttribute("gameMembers",gameMembers);
-                    return "views/home/admin";
+                    return "redirect:/view/admin/game/list";
                 }
 
                 session.setAttribute("user",checkedUser);

@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://aaaicu.iptime.org:13305/spiritual_war?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8
     username: aaaicu
-    password:
+    password: dk2cka!!
 
   jpa:
     open-in-view: true

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}"
+      th:with="metaTitle='메인'">
+<head>
+</head>
+
+<body>
+<!-- content -->
+<th:block layout:fragment="content">
+    <!-- 참여중인 게임이 없을 경우 : 게임리스트-->
+    <p>참여자 명단입니다. </p>
+    <p th:text="|참가자 총 ${gameMembers.size()} 명|"></p>
+
+    <h2><input type="button" onclick="plusNewGameToList()" value = "돌아가기"></h2>
+
+
+    <table id="participationList">
+        <colgroup>
+            <col  style="width:5%" />
+            <col  style="width:12%" />
+            <col  style="width:12%" />
+            <col  style="width:12%" />
+            <col  style="width:12%" />
+            <col  style="width:12%" />
+            <col  style="width:12%" />
+            <col  style="width:12%" />
+
+        </colgroup>
+
+        <thead>
+        <tr>
+            <th>아이디</th>
+            <th>참가자이름</th>
+            <th>팬</th>
+            <th>절친</th>
+            <th>성령의 눈</th>
+            <th>역할</th>
+            <th>매수한 악마</th>
+            <th>매수된 시간</th>
+        </tr>
+
+        </thead>
+        <tbody>
+
+        <tr th:each="member : ${gameMembers}" th:id="${member.idx}">
+            <th th:text="${member.user.userId}">참가자번호</th>
+            <th th:text="${member.user.userName}">참가자이름</th>
+            <th> <div th:if="${member.fan != null}" th:text="|${member.fan.user.userName}(${member.fan.user.userId})|"></div></th>
+            <th> <div th:if="${member.bestFriend != null}" th:text="|${member.bestFriend.user.userName}(${member.bestFriend.user.userId})|"></div></th>
+            <th><div th:if="${member.holyWatching != null}" th:text="|${member.holyWatching.user.userName}(${member.holyWatching.user.userId})|"></div></th>
+            <th th:text="${member.participationRole.getValue()}">역할</th>
+            <th><div th:if="${member.hireDevil != null}" th:text="|${member.hireDevil.user.userName}(${member.hireDevil.user.userId})|"></div></th>
+            <th th:text="${#temporals.format(member.hiredDt, 'yy/MM/dd HH:mm:ss')}">매수된 시간</th>
+
+        </tr>
+        </tbody>
+
+    </table>
+
+    <h2><input type="button" id="btn_game" name="gameButton" th:onclick="|changeStatus(${gameIdx})|" value = "게임시작"></h2>
+</th:block>
+<!-- //content -->
+
+<!-- script -->
+<th:block layout:fragment="custom_js">
+    <script th:src="@{/assets/views/js/admin-detail.js}"></script>
+</th:block>
+<!-- //script -->
+
+</body>
+</html>
