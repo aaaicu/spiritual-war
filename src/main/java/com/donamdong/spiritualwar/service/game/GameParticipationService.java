@@ -3,7 +3,6 @@ package com.donamdong.spiritualwar.service.game;
 import com.donamdong.spiritualwar.common.exception.ApiException;
 import com.donamdong.spiritualwar.common.exception.ErrorCode;
 import com.donamdong.spiritualwar.domain.*;
-import com.donamdong.spiritualwar.domain.dto.MemberDTO;
 import com.donamdong.spiritualwar.repository.game.GameParticipationRepository;
 import com.donamdong.spiritualwar.repository.game.GameRepository;
 import com.donamdong.spiritualwar.service.user.UserService;
@@ -24,10 +23,10 @@ public class GameParticipationService {
     private final UserService userService;
     private final GameService gameService;
 
-    public void joinGame(Long gameIdx, Long userIdx) {
+    public GameParticipation joinGame(Long gameIdx, Long userIdx) {
         Game game = gameService.getGame(gameIdx);
         User user = userService.getUser(userIdx);
-        gameParticipationRepository.save(GameParticipation.builder()
+        return gameParticipationRepository.save(GameParticipation.builder()
                 .game(game)
                 .user(user)
                 .bestFriend(null)
@@ -35,7 +34,25 @@ public class GameParticipationService {
                 .hiredDt(null)
                 .createDt(LocalDateTime.now())
                 .build());
+    }
 
+    public void outGame(GameParticipation gameParticipation) {
+        if (isGameStarted(gameParticipation)) {
+            throw new ApiException(ErrorCode.GAME_ALREADY_STARTED);
+        }
+
+        gameParticipationRepository.delete(gameParticipation);
+    }
+
+    private boolean isGameStarted(GameParticipation gameParticipation) {
+        Game game = gameService.getGame(gameParticipation.getGame().getIdx());
+        return game.getStartDt() != null;
+    }
+
+    public GameParticipation findParticipation(Long gameIdx, Long userIdx) {
+        Game game = gameService.getGame(gameIdx);
+        User user = userService.getUser(userIdx);
+        return gameParticipationRepository.findGameParticipationByGameAndUser(game, user);
     }
 
     public List<GameParticipation> findGameMember(Long userIdx) {
@@ -52,7 +69,7 @@ public class GameParticipationService {
     public List<GameParticipation> findGameMemberAll(Long gameIdx) {
         Game game = gameRepository.getById(gameIdx);
         List<GameParticipation> gameMember = gameParticipationRepository.findAllUserByGameJoin(game);
-        if (gameMember.size() == 0) {
+        if (gameMember.isEmpty()) {
             return List.of();
         } else {
             return gameMember;

@@ -3,60 +3,6 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/defaultLayout}"
       th:with="metaTitle='로그인'">
-<head>
-
-    <script>
-        function login() {
-            const id = document.getElementById('user-id').value;
-
-            const eventSource = new EventSource(`/push/subscribe/` + id);
-
-            eventSource.addEventListener("sse", function (event) {
-                alert("test!!")
-
-                console.log(event.data);
-
-
-                (async () => {
-                    // 브라우저 알림
-                    const showNotification = () => {
-                        console.log(eventSource)
-                        const notification = new Notification('코드 봐줘', {
-                            body: "테스트트트트트"
-                        });
-
-                        setTimeout(() => {
-                            notification.close();
-                        }, 10 * 1000);
-
-                        notification.addEventListener('click', () => {
-                            // window.open(data.url, '_blank');
-                        });
-                    }
-
-                    // 브라우저 알림 허용 권한
-                    let granted = false;
-
-                    if (Notification.permission === 'granted') {
-                        granted = true;
-                    } else if (Notification.permission !== 'denied') {
-                        let permission = await Notification.requestPermission();
-                        granted = permission === 'granted';
-                    }
-
-                    // 알림 보여주기
-                    if (granted) {
-                        showNotification();
-
-                    }
-
-                })();
-            })
-        }
-
-
-    </script>
-</head>
 <body>
 <!-- content -->
 <th:block layout:fragment="content">
@@ -74,7 +20,7 @@
             </tr>
         </table>
         <br>
-        <input type="submit" onclick="login()" value="로그인">
+        <input type="submit" value="로그인">
         <input type="button" onclick="goSignUpPage()" value="회원가입">
     </form>
 </th:block>

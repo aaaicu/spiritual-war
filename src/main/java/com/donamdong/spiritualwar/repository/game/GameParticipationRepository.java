@@ -2,6 +2,7 @@ package com.donamdong.spiritualwar.repository.game;
 
 import com.donamdong.spiritualwar.domain.Game;
 import com.donamdong.spiritualwar.domain.GameParticipation;
+import com.donamdong.spiritualwar.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -18,4 +19,8 @@ public interface GameParticipationRepository extends JpaRepository<GameParticipa
             "left outer join fetch p.holyWatching " +
             "where p.game = :game order by p.createDt")
     List<GameParticipation> findAllUserByGameJoin(Game game);
+
+    GameParticipation findGameParticipationByGameAndUser(Game game, User user);
+
+    List<GameParticipation> findAllByGame(Game game);
 }

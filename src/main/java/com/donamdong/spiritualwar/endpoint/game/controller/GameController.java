@@ -1,6 +1,9 @@
 package com.donamdong.spiritualwar.endpoint.game.controller;
 
+import com.donamdong.spiritualwar.common.exception.ApiException;
+import com.donamdong.spiritualwar.common.exception.ErrorCode;
 import com.donamdong.spiritualwar.domain.Game;
+import com.donamdong.spiritualwar.domain.GameParticipation;
 import com.donamdong.spiritualwar.domain.GameSetting;
 import com.donamdong.spiritualwar.endpoint.game.dto.request.OpenGameRequest;
 import com.donamdong.spiritualwar.endpoint.game.dto.request.SaveGameRequest;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -63,14 +67,25 @@ public class GameController {
     }
 
     @GetMapping("/join")
-    ResponseEntity<String> joinGame(@RequestParam String gameIdx, @RequestParam String userIdx) {
+    ResponseEntity<Long> joinGame(@RequestParam String gameIdx, @RequestParam String userIdx) {
         try {
-            gameParticipationService.joinGame(Long.parseLong(gameIdx), Long.parseLong(userIdx));
+            Long participationIdx = gameParticipationService.joinGame(Long.parseLong(gameIdx), Long.parseLong(userIdx)).getIdx();
+            return ResponseEntity.of(Optional.of(participationIdx));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("게임 참여 오류");
+            throw new ApiException(ErrorCode.GAME_PARTICIPATION_ERROR);
         }
+
+    }
+
+    @GetMapping("/out")
+    ResponseEntity<String> outGame(@RequestParam String gameIdx, @RequestParam String userIdx) {
+        GameParticipation participation = gameParticipationService.findParticipation(Long.parseLong(gameIdx), Long.parseLong(userIdx));
+
+        gameParticipationService.outGame(participation);
         return ResponseEntity.noContent().build();
     }
+
+
 
     @GetMapping("/status")
     ResponseEntity<String> status(@RequestParam String gameIdx) {

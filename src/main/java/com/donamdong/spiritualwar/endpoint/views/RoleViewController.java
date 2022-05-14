@@ -35,8 +35,10 @@ public class RoleViewController {
             if (!gameMembers.isEmpty()) {
                 model.addAttribute("gameMembers",gameMembers);
 
+                Long gameIdx = gameMembers.get(0).getGame().getIdx();
                 GameParticipation gameParticipation = gameMembers.stream().filter(e -> e.getUser().getIdx().equals(checkedUser.getIdx())).findFirst().get();
                 model.addAttribute("member",gameParticipation);
+                model.addAttribute("participationIdx", gameIdx);
 
             } else {
                 // 참여중 게임 없을 경우

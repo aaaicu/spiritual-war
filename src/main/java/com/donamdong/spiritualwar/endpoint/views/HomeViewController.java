@@ -45,7 +45,7 @@ public class HomeViewController {
 
         } else {
             setSessionNormalUser(session, user.get());
-            setModelUserGameInfo(model,  user.get());
+            setModelUserGameInfo(model, user.get());
             return "views/home/main";
         }
     }
@@ -111,11 +111,17 @@ public class HomeViewController {
     }
 
     private void setModelUserGameInfo(Model model, User user) {
-        // 참여중 게임 있을 경우
+
         List<GameParticipation> gameMembers = gameParticipationService.findGameMember(user.getIdx());
 
         if (!gameMembers.isEmpty()) {
+            // 참여중 게임 있을 경우
             model.addAttribute("gameMembers",gameMembers);
+
+            Long gameIdx = gameMembers.get(0).getGame().getIdx();
+            model.addAttribute("gameIdx", gameIdx);
+            model.addAttribute("participationIdx", gameIdx);
+
         } else {
             // 참여중 게임 없을 경우
             model.addAttribute("gameInfo", gameService.fetchCanJoinGameList());

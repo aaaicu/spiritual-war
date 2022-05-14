@@ -1,6 +1,7 @@
 package com.donamdong.spiritualwar.domain;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,11 +13,16 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Setter
-public class Notice {
+@EqualsAndHashCode(of = "idx")
+public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idx")
     private Long idx;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "game_idx")
+    private Game game;
 
     @Column(name = "notice_content")
     private String noticeContent;
@@ -27,6 +33,9 @@ public class Notice {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participation_idx")
     private GameParticipation participation;
+
+    @Column(nullable = false)
+    private Boolean isRead;
 
     @Column(name = "create_dt")
     private LocalDateTime createDt;

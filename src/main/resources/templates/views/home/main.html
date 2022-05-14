@@ -31,6 +31,8 @@
     </div>
     <!-- 참여중인 게임 있을 있을경우 -->
     <div th:if="${session.user != null && gameMembers != null}">
+
+
         <p th:text="|참가자 총 ${gameMembers.size()} 명|"></p>
         <table id="participationList">
             <thead>
@@ -47,8 +49,9 @@
                 <th th:text="${member.user.userName}">참가자번호</th>
             </tr>
             </tbody>
-
         </table>
+
+        <input type="button" th:onclick="|outGame(${session.user.idx},${gameIdx})|" value="게임에서 나가기">
     </div>
 
 </th:block>

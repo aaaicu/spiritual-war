@@ -2,6 +2,11 @@ server:
   port: 8080
 
 spring:
+
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://aaaicu.iptime.org:13305/spiritual_war?serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8
@@ -16,9 +21,18 @@ spring:
     properties:
       hibernate.format_sql: true
 
-# 스웨거 3.0.0 업데이트 후 spring 2.6 버전 호환 불가
+  output:
+    ansi:
+      enabled: always
+
+  # 스웨거 3.0.0 업데이트 후 spring 2.6 버전 호환 불가
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
       
       
+logging:
+  level:
+    org.hibernate.type: trace
+
+
