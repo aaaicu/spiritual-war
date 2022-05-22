@@ -21,7 +21,6 @@ public class NotificationController {
 
         return notificationService.subscribe(participationIdx, lastEventId);
     }
-
     
     @PostMapping(value = "/send/{gameIdx}/participants")
     public ResponseEntity<String> sendGameParticipants(@PathVariable Long gameIdx, @RequestBody String content) {
